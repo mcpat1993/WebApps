@@ -1,34 +1,11 @@
 <?php
 	session_start();
-	$classname ='';
-	if(isset($_POST["classname"]))
-	{
-		if(empty($_POST["classname"]))
-		{
-			$_SESSION["error"] = "Class Name was not entered";
-			echo "classname empty <br>";
-			header("Location: hometeacher.php");
-			exit();
-		}
-		$classname = $_POST["classname"];
-	}
-	$classsize='';
-	if(isset($_POST["classsize"]))
-	{
-		if(empty($_POST["classsize"]))
-		{
-			$_SESSION["error"] = "Max Class Size was not entered";
-			echo "classsize empty <br>";
-			header("Location: hometeacher.php");
-			exit();
-		}
-		$classsize = $_POST["classsize"];
-	}
-	echo "name: " . $_POST["classname"];
-	echo "<br>size: " . $_POST["classsize"] . "<br>";
-	unset($_SESSION["error"]);
-	//$_SESSION["error"] = "...".$classname."..."; 
-	//header("Location: hometeacher.php");
+	$classname = $_POST["classname"];
+	$classsize= $_POST["classsize"];
+	$classdescription = $_POST["classdescription"];
+	$username= $_SESSION["username"];
+	$username= $_SESSION["username"];
+	
 	$servername = "localhost";
 	$dbusername = "root";
 	$dbpassword = "";
@@ -43,60 +20,57 @@
 	//sql to class entered already exists
 	$sql = "SELECT * FROM `classes` WHERE `name` = '" . $classname . "'";
 	$result = $conn->query($sql);
+	echo '{';
 	if($result->num_rows > 0)
 	{
 		//there already exists the class trying to be made
-		$_SESSION["error"] = "This class already exists. Please try again";
-		header("Location: hometeacher.php");
-		exit();
+		echo "'result':'This class already exists'";
 	}else
 	{
 		//class doesn't exist yet so ADD it
-		$sql = "INSERT INTO `classes` (`name`, `max_students`, `curr_students`, `teacher`) VALUES ('" . $classname . "', '" . $classsize . "', '0', '" . $_SESSION["lastname"] . "')";
+		$sql = "INSERT INTO `classes` (`name`, `max_students`, `teacher`, `description`) VALUES ('" . $classname . "', '" . $classsize . "', '" . $username . "', '" . $classdescription . "')";
+		//echo $sql;
 		$result = $conn->query($sql);
 		//update teachers classes in db
-		$sql = "SELECT `class1` FROM `users` WHERE `username`='" . $_SESSION["username"] . "'";
+		$sql = "SELECT `class1` FROM `users` WHERE `username`='" . $username . "'";
 		$result = $conn->query($sql);
 		if(mysqli_fetch_assoc($result)["class1"] === NULL)
 		{//add to class 1
-			$sql = "UPDATE `users` SET `class1`='" . $classname . "' WHERE `username`='" . $_SESSION["username"] . "'";
+			$sql = "UPDATE `users` SET `class1`='" . $classname . "' WHERE `username`='" . $username . "'";
 			$result = $conn->query($sql);
-			$_SESSION["class1"] = $classname;
+			echo '"result":"Class added!"';
 		}else
 		{
 			$_SESSION["class1"] = mysqli_fetch_assoc($result)["class1"];
-			$sql = "SELECT `class2` FROM `users` WHERE `username`='" . $_SESSION["username"] . "'";
+			$sql = "SELECT `class2` FROM `users` WHERE `username`='" . $username . "'";
 			$result = $conn->query($sql);
 			if(mysqli_fetch_assoc($result)["class2"] === NULL)
 			{
 				//add to class2
-				$sql = "UPDATE `users` SET `class2`='" . $classname . "' WHERE `username`='" . $_SESSION["username"] . "'";
+				$sql = "UPDATE `users` SET `class2`='" . $classname . "' WHERE `username`='" . $username . "'";
 				$result = $conn->query($sql);
-				$_SESSION["class2"] = $classname;
+				echo '"result":"Class added!"';
 			}else
 			{
 				$_SESSION["class2"] = mysqli_fetch_assoc($result)["class2"];
-				$sql = "SELECT `class3` FROM `users` WHERE `username`='" . $_SESSION["username"] . "'";
+				$sql = "SELECT `class3` FROM `users` WHERE `username`='" . $username . "'";
 				$result = $conn->query($sql);
 				if(mysqli_fetch_assoc($result)["class3"] === NULL)
 				{
 					//add to class3
-					$sql = "UPDATE `users` SET `class3`='" . $classname . "' WHERE `username`='" . $_SESSION["username"] . "'";
+					$sql = "UPDATE `users` SET `class3`='" . $classname . "' WHERE `username`='" . $username . "'";
 					$result = $conn->query($sql);
-					$_SESSION["class3"] = $classname;
+					echo '"result": "Class added!"';
 				}else
 				{
-					$_SESSION["class3"] = mysqli_fetch_assoc($result)["class3"];
-					$_SESSION["error"] = "You can't add any more classes!";
-					header("Location: hometeacher.php");
-					exit();
+					$somevar = 'You cannot add any more classes!';
+					echo '"result":"You cannot add any more classes!"';
 				}
 			}
 		}
 		$result = $conn->query($sql);
-		$_SESSION["dbresult"] = "New class added!";
-		header("Location: hometeacher.php");
-		exit();
+		$conn->close();
 	}
-	$conn->close();
+	
+	echo '}';
 ?>

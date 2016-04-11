@@ -21,8 +21,14 @@ if(!isset($_SESSION["loggedin"]))
 </head>
 <body>
 	<fieldset>
-	<h1>Welcome to My Signup, <?= $_SESSION["username"]?>.<br></h1>
-	You are a teacher! Checked courses are active.
+	<h1>Welcome to My Signup, <?= $_SESSION["username"]?></h1>
+	<div id="displayCourses">Courses: <img src="img/add.ico" alt="Add" style="width:20px;height:20px;" onclick="javascript:showAddClassMenu()">
+	<img src="img/drop.png" alt="Drop" style="width:20px;height:20px;" onclick="javascript:showDropClassMenu()">
+		<ul id="classElements">
+		</ul>
+	</div>
+	<div id="mainInfo">
+	</div>
 	<form action="" method="post">
 		<?php
 			$servername = "localhost";
@@ -40,43 +46,11 @@ if(!isset($_SESSION["loggedin"]))
 			$sql = "SELECT `class1`,`class2`,`class3` FROM `users` WHERE `username`='" . $_SESSION["username"] . "'";
 			$result = $conn->query($sql);
 			$classarr = mysqli_fetch_assoc($result);
-			echo "1: " . $classarr["class1"] . " 2: " . $classarr["class2"] . " 3: " . $classarr["class3"] . "<br>";
-			if($classarr["class1"] !== NULL)
-			{
-				$_SESSION["class1"] = $classarr["class1"];
-				?>
-				<input type="checkbox" name=<?php echo $_SESSION["class1"];?> value=<?php echo $_SESSION["class1"];?> checked><?php echo $_SESSION["class1"];?><br>
-				<?php
-			}
-			if($classarr["class2"] !== NULL)
-			{
-				$_SESSION["class2"] = $classarr["class2"];
-				?>
-				<input type="checkbox" name=<?php echo $_SESSION["class2"];?> value=<?php echo $_SESSION["class2"];?> checked="checked"><?php echo $_SESSION["class2"];?><br>
-				<?php
-			}		
-			if($classarr["class3"] !== NULL)
-			{
-				$_SESSION["class3"] = $classarr["class3"];
-				?>
-				<input type="checkbox" name=<?php echo $_SESSION["class3"];?> value=<?php echo $_SESSION["class3"];?> checked="checked"><?php echo $_SESSION["class3"];?><br>
-				<?php
-			}
 		?>
 	</form>
 	</fieldset>
-	<fieldset>
-	Please fill out the form to create a new class
-	<form action="processClass.php" method="post">
-		Class Name: <input type="text" name="classname"><br>
-		Max Class Size: <input type="text" name="classsize"><br>
-		<?php 	if(isset($_SESSION["error"])){echo "<font color=\"red\">" . $_SESSION["error"] . "</font><br>";}
-				if(isset($_SESSION["dbresult"])){echo "<font color=\"green\">" . $_SESSION["dbresult"] . "</font><br>";}
-				unset($_SESSION["error"]);
-				unset($_SESSION["dbresult"]);?>
-		<input type="submit" value="Register Class">
-	</form>
-	</fieldset>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<script src="JS/professorPage.js"></script>
 </body>
 </html>
 

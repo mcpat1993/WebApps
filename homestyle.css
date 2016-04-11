@@ -1,8 +1,6 @@
 body {
     background-color: lightblue;
-    text-align: center;
-    margin: center;
-    width: 60%;
+    width: 80%;
     border: 3px solid #72AD21;
     padding: 10px;
     background-image: url("backgroundpic.jpg");
@@ -11,12 +9,19 @@ body {
 
 h1 {
     color: dark-blue;
-    margin: auto;
+    text-align: center;
 }
 
-#divElement{
-	position: absolute;
-	left:50%;
+#displayCourses, #mainInfo {
+	background-color: white;
+	display: inline-block;
+	border: 3px solid #72AD21;
+	margin: 3px;
+	vertical-align:top;
+}
+
+#mainInfo{
+	width:400px;
 }
 
 img {
@@ -25,9 +30,18 @@ img {
 }
 
 fieldset {
-	background-color: white;
+	background-color: lightblue;
 }
 
 .mainmenu {
 	color:white;
+}
+
+.largeTextInput{
+	height:150px;
+	width:300px;
+}
+
+textarea{
+	resize:none;
 }

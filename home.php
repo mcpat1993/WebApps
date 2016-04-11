@@ -21,7 +21,14 @@ if(!isset($_SESSION["loggedin"]))
 </head>
 <body>
 	<fieldset>
-  		<h1>Welcome to My Signup, <?= $_SESSION["firstname"]?> <?= $_SESSION["lastname"]?></h1>
+		<h1>Welcome to My Signup, <?= $_SESSION["firstname"]?> <?= $_SESSION["lastname"]?></h1>
+		<div id="displayCourses">Courses: <img src="img/add.ico" alt="Add" style="width:20px;height:20px;" onclick="javascript:showAddClassMenu()">
+			<img src="img/drop.png" alt="Drop" style="width:20px;height:20px;" onclick="javascript:showDropClassMenu()">
+			<ul id="classElements">
+			</ul>
+		</div>
+		<div id="mainInfo">
+		</div>
 		<p>You are a Student! You are signed up for the following courses.<br></p>
 		<form action="" method="post">
 			<?php
@@ -83,5 +90,7 @@ if(!isset($_SESSION["loggedin"]))
 				unset($_SESSION["dbresult"]);?>
 		</form>
 	</fieldset>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<script src="JS/studentPage.js"></script>
 </body>
 </html>

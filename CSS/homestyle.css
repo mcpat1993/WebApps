@@ -1,0 +1,71 @@
+body {
+    background-color: lightblue;
+    width: 80%;
+    border: 3px solid #72AD21;
+    padding: 10px;
+    background-image: url("../img/backgroundpic.jpg");
+    background-size: contain;
+}
+
+h1 {
+    color: dark-blue;
+    text-align: center;
+}
+
+#displayCourses, #mainInfo {
+	background-color: white;
+	display: inline-block;
+	border: 3px solid #72AD21;
+	margin: 3px;
+	vertical-align:top;
+}
+
+#mainInfo{
+	width:400px;
+}
+
+img {
+    opacity: 0.4;
+    filter: alpha(opacity=40); 
+}
+
+fieldset {
+	background-color: lightblue;
+}
+
+.mainmenu {
+	color:white;
+}
+
+.largeTextInput{
+	height:150px;
+	width:300px;
+}
+
+textarea{
+	resize:none;
+}
+
+#notification {
+    position:fixed;
+    top:30px;
+    width:100%;
+    z-index:105;
+    text-align:center;
+    font-weight:bold;
+    font-size:15px;
+    color:white;
+    background-color:red;
+    padding:5px;
+}
+#notification span.dismiss {
+    border:2px solid #FFF;
+    padding:0 5px;
+    cursor:pointer;
+    float:right;
+    margin-right:10px;
+}
+#notification a {
+    color:white;
+    font-weight:bold
+}

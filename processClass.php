@@ -20,17 +20,15 @@
 	//sql to class entered already exists
 	$sql = "SELECT * FROM `classes` WHERE `name` = '" . $classname . "'";
 	$result = $conn->query($sql);
-	echo '{';
+	//echo '{';
+	$returnar;
 	if($result->num_rows > 0)
 	{
 		//there already exists the class trying to be made
-		echo "'result':'This class already exists'";
+		$returnarr = array('result' => 'This class already exists');
+		echo json_encode($returnarr);
 	}else
 	{
-		//class doesn't exist yet so ADD it
-		$sql = "INSERT INTO `classes` (`name`, `max_students`, `teacher`, `description`) VALUES ('" . $classname . "', '" . $classsize . "', '" . $username . "', '" . $classdescription . "')";
-		//echo $sql;
-		$result = $conn->query($sql);
 		//update teachers classes in db
 		$sql = "SELECT `class1` FROM `users` WHERE `username`='" . $username . "'";
 		$result = $conn->query($sql);
@@ -38,7 +36,11 @@
 		{//add to class 1
 			$sql = "UPDATE `users` SET `class1`='" . $classname . "' WHERE `username`='" . $username . "'";
 			$result = $conn->query($sql);
-			echo '"result":"Class added!"';
+			$returnarr = array('result' => 'Class added!');
+			echo json_encode($returnarr);
+			//class doesn't exist yet so ADD it
+			$sql = "INSERT INTO `classes` (`name`, `max_students`, `teacher`, `description`) VALUES ('" . $classname . "', '" . $classsize . "', '" . $username . "', '" . $classdescription . "')";
+			$result = $conn->query($sql);
 		}else
 		{
 			$_SESSION["class1"] = mysqli_fetch_assoc($result)["class1"];
@@ -49,7 +51,11 @@
 				//add to class2
 				$sql = "UPDATE `users` SET `class2`='" . $classname . "' WHERE `username`='" . $username . "'";
 				$result = $conn->query($sql);
-				echo '"result":"Class added!"';
+				$returnarr = array('result' => 'Class added!');
+				echo json_encode($returnarr);
+				//class doesn't exist yet so ADD it
+				$sql = "INSERT INTO `classes` (`name`, `max_students`, `teacher`, `description`) VALUES ('" . $classname . "', '" . $classsize . "', '" . $username . "', '" . $classdescription . "')";
+				$result = $conn->query($sql);
 			}else
 			{
 				$_SESSION["class2"] = mysqli_fetch_assoc($result)["class2"];
@@ -60,17 +66,20 @@
 					//add to class3
 					$sql = "UPDATE `users` SET `class3`='" . $classname . "' WHERE `username`='" . $username . "'";
 					$result = $conn->query($sql);
-					echo '"result": "Class added!"';
+					$returnarr = array('result' => 'Class added!');
+					echo json_encode($returnarr);
+					//class doesn't exist yet so ADD it
+					$sql = "INSERT INTO `classes` (`name`, `max_students`, `teacher`, `description`) VALUES ('" . $classname . "', '" . $classsize . "', '" . $username . "', '" . $classdescription . "')";
+					$result = $conn->query($sql);
 				}else
 				{
 					$somevar = 'You cannot add any more classes!';
-					echo '"result":"You cannot add any more classes!"';
+					$returnarr = array('result' => 'You cannot add any more classes!');
+					echo json_encode($returnarr);
 				}
 			}
 		}
 		$result = $conn->query($sql);
 		$conn->close();
 	}
-	
-	echo '}';
 ?>

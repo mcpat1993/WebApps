@@ -11,12 +11,12 @@ if(!isset($_SESSION["loggedin"]))
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<div align="right" class="mainmenu" href="homestyle.css" onclick="logout();">
+<div align="right" class="mainmenu" href="CSS/homestyle.css" onclick="logout();">
 	Logout
 </div>
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="homestyle.css">
+	<link rel="stylesheet" type="text/css" href="CSS/homestyle.css">
 	<title>Document</title>
 </head>
 <body>
@@ -49,6 +49,9 @@ if(!isset($_SESSION["loggedin"]))
 		?>
 	</form>
 	</fieldset>
+	<div id="notification" style="display: none;">
+		<span class="dismiss"><a title="dismiss">X</a></span>
+	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 	<script src="JS/professorPage.js"></script>
 </body>

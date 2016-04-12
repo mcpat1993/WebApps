@@ -148,33 +148,41 @@ function submitAddClass()
 	if(className.length == 0)
 	{
 		alert("You have to enter a class name!");
+		//e.preventDefault();
 	}else
 	{
 		if(classSize.search(/^[0-9]*$/) === -1 || classSize.length >= 3)
 		{
 			alert("A class size has to be between 0 and 99!");
+			//e.preventDefault();
 		}else
 		{
 			if(classDescription.length == 0)
 			{
 				alert("You have to enter a class description!");
+				//e.preventDefault();
 			}else
 			{
 				if(currentClassesStr.indexOf(className) !== -1)
 				{
 					alert("Ummm Actually we only allow courses with unique names. That already exists as a course bruh!");
+					//e.preventDefault();
 				}else
 				{
 					$.ajax({
 					type: "POST",
-					//dataType: "json",
+					dataType: "json",
 					url: "processClass.php",
 					data: {'classname':className, 'classsize':classSize, 'classdescription':classDescription},
-					success: function(datas){
+					success: function(data){
 						console.log("SUCCESS SUBMITADDCLASS!");
-						console.log(datas);
-						console.log(datas["result"]);
-						//alert(datas["result"]);
+						console.log(data);
+						console.log(data["result"]);
+						$("#notification").fadeIn("slow").append(data["result"]);
+						$(".dismiss").click(function(){
+							   $("#notification").fadeOut("slow");
+						});
+						//alert(data["result"]);
 						//var resultMessage = document.createElement()
 						populateCoursesDiv();
 						var mainInfo = document.getElementById("mainInfo");

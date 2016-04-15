@@ -4,7 +4,6 @@
 	$classsize= $_POST["classsize"];
 	$classdescription = $_POST["classdescription"];
 	$username= $_SESSION["username"];
-	$username= $_SESSION["username"];
 	
 	$servername = "localhost";
 	$dbusername = "root";
@@ -20,7 +19,6 @@
 	//sql to class entered already exists
 	$sql = "SELECT * FROM `classes` WHERE `name` = '" . $classname . "'";
 	$result = $conn->query($sql);
-	//echo '{';
 	$returnar;
 	if($result->num_rows > 0)
 	{
@@ -79,7 +77,5 @@
 				}
 			}
 		}
-		$result = $conn->query($sql);
-		$conn->close();
 	}
 ?>

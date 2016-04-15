@@ -49,7 +49,7 @@ textarea{
 #notification {
     position:fixed;
     top:30px;
-    width:100%;
+    width:90%;
     z-index:105;
     text-align:center;
     font-weight:bold;

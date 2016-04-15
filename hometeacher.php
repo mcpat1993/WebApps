@@ -29,28 +29,10 @@ if(!isset($_SESSION["loggedin"]))
 	</div>
 	<div id="mainInfo">
 	</div>
-	<form action="" method="post">
-		<?php
-			$servername = "localhost";
-			$dbusername = "root";
-			$dbpassword = "";
-			$dbname = "webapps";
-			//create connection with database
-			$conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
-			//confirming that connection was made
-			if($conn->connect_error)
-			{
-				die("God Damn connection failed: ". $conn->connect_error);
-			}
-			//sql to class entered already exists
-			$sql = "SELECT `class1`,`class2`,`class3` FROM `users` WHERE `username`='" . $_SESSION["username"] . "'";
-			$result = $conn->query($sql);
-			$classarr = mysqli_fetch_assoc($result);
-		?>
-	</form>
 	</fieldset>
 	<div id="notification" style="display: none;">
 		<span class="dismiss"><a title="dismiss">X</a></span>
+		<text id="text"></text>
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 	<script src="JS/professorPage.js"></script>

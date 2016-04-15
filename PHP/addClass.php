@@ -1,10 +1,8 @@
 <?php
 	session_start();
-	$username ='';
-	if(isset($_POST["username"]))
-	{
-		$username = $_POST["username"];
-	}
+	$classname = $_POST["classname"];
+	$username= $_SESSION["username"];
+	
 	$servername = "localhost";
 	$dbusername = "root";
 	$dbpassword = "";
@@ -16,35 +14,59 @@
 	{
 		die("God Damn connection failed: ". $conn->connect_error);
 	}
-	//setting students class to the class name
-	$sql = "SELECT `class1`,`class2`,`class3` FROM `users` WHERE `username`='" . $username . "'";
+	//This portion will check to make sure that the class isn't full
+	$sql = "SELECT * FROM `users` WHERE `class1`='" . $classname . "' OR `class2`='" . $classname . "' OR `class3`='" . $classname . "'";
 	$result = $conn->query($sql);
-	$classarr = mysqli_fetch_assoc($result);
-	$classname = $_POST["classtoadd"];
-	if($classarr["class1"] === NULL)
-	{//add to class 1
-		$sql = "UPDATE `users` SET `class1`='" . $classname . "' WHERE `username`='" . $username . "'";
-		$result = $conn->query($sql);
-	}else
+	$currentTotal = $result->num_rows - 1;
+	$sql = "SELECT `max_students` FROM `classes` WHERE `name`='" . $classname . "'";
+	$result = $conn->query($sql);
+	$max = mysqli_fetch_assoc($result)["max_students"];
+	if($currentTotal<$max)
 	{
-		if($classarr["class2"] === NULL)
-		{
-			//add to class2
-			$sql = "UPDATE `users` SET `class2`='" . $classname . "' WHERE `username`='" . $username . "'";
+		//update teachers classes in db
+		$sql = "SELECT `class1` FROM `users` WHERE `username`='" . $username . "'";
+		$result = $conn->query($sql);
+		if(mysqli_fetch_assoc($result)["class1"] === NULL)
+		{//add to class 1
+			$sql = "UPDATE `users` SET `class1`='" . $classname . "' WHERE `username`='" . $username . "'";
 			$result = $conn->query($sql);
+			$returnarr = array('result' => 'Class added!');
+			echo json_encode($returnarr);
 		}else
 		{
-			if($classarr["class3"] === NULL)
+			$_SESSION["class1"] = mysqli_fetch_assoc($result)["class1"];
+			$sql = "SELECT `class2` FROM `users` WHERE `username`='" . $username . "'";
+			$result = $conn->query($sql);
+			if(mysqli_fetch_assoc($result)["class2"] === NULL)
 			{
-				//add to class3
-				$sql = "UPDATE `users` SET `class3`='" . $classname . "' WHERE `username`='" . $username . "'";
+				//add to class2
+				$sql = "UPDATE `users` SET `class2`='" . $classname . "' WHERE `username`='" . $username . "'";
 				$result = $conn->query($sql);
+				$returnarr = array('result' => 'Class added!');
+				echo json_encode($returnarr);
 			}else
 			{
-				$error = array('error' => 'You cannot add any more classes!');
-				echo json_encode($error);
+				$_SESSION["class2"] = mysqli_fetch_assoc($result)["class2"];
+				$sql = "SELECT `class3` FROM `users` WHERE `username`='" . $username . "'";
+				$result = $conn->query($sql);
+				if(mysqli_fetch_assoc($result)["class3"] === NULL)
+				{
+					//add to class3
+					$sql = "UPDATE `users` SET `class3`='" . $classname . "' WHERE `username`='" . $username . "'";
+					$result = $conn->query($sql);
+					$returnarr = array('result' => 'Class added!');
+					echo json_encode($returnarr);
+				}else
+				{
+					$somevar = 'You cannot add any more classes!';
+					$returnarr = array('result' => 'You cannot add any more classes!');
+					echo json_encode($returnarr);
+				}
 			}
 		}
+	}else
+	{
+		$returnarr = array('result' => 'Class is already too full for your ass!');
+		echo json_encode($returnarr);
 	}
-	
 ?>

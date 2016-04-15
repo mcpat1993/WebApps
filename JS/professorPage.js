@@ -148,25 +148,21 @@ function submitAddClass()
 	if(className.length == 0)
 	{
 		alert("You have to enter a class name!");
-		//e.preventDefault();
 	}else
 	{
 		if(classSize.search(/^[0-9]*$/) === -1 || classSize.length >= 3)
 		{
 			alert("A class size has to be between 0 and 99!");
-			//e.preventDefault();
 		}else
 		{
 			if(classDescription.length == 0)
 			{
 				alert("You have to enter a class description!");
-				//e.preventDefault();
 			}else
 			{
 				if(currentClassesStr.indexOf(className) !== -1)
 				{
 					alert("Ummm Actually we only allow courses with unique names. That already exists as a course bruh!");
-					//e.preventDefault();
 				}else
 				{
 					$.ajax({
@@ -175,17 +171,12 @@ function submitAddClass()
 					url: "processClass.php",
 					data: {'classname':className, 'classsize':classSize, 'classdescription':classDescription},
 					success: function(data){
-						console.log("SUCCESS SUBMITADDCLASS!");
-						console.log(data);
-						console.log(data["result"]);
-						$("#notification").fadeIn("slow").append(data["result"]);
+						$("#notification").fadeIn("slow");
+						$("#notification > #text").html(data["result"]);
 						$(".dismiss").click(function(){
 							   $("#notification").fadeOut("slow");
 						});
-						//alert(data["result"]);
-						//var resultMessage = document.createElement()
 						populateCoursesDiv();
-						var mainInfo = document.getElementById("mainInfo");
 						mainInfo.innerHTML = "";
 					},
 					error: function(data){
@@ -201,6 +192,7 @@ function submitAddClass()
 function showDropClassMenu()
 {
 	console.log("INSIDE SHOWDROPCLASSMENU");
+	console.log(currentClassesStr);
 	mainInfo.innerHTML = "Please select the class you would like to cancel:";
 	
 	var classesNow = document.getElementsByName("classes");
@@ -212,13 +204,11 @@ function showDropClassMenu()
 	for(x=0;x<currentClassesStr.length;x++)
 	{
 		console.log("interation "+x+" for classes");
-		//classes[x] = document.getElementById("class"+(x+1));
-		//console.log(classes[x].innerHTML);
 		classesInputElements[x] = document.createElement("INPUT");
 		classesInputElements[x].setAttribute('type', "radio");
 		classesInputElements[x].setAttribute('name', "classes");
 		classesInputElements[x].setAttribute('value', currentClassesStr[x]);
-		label = document.createElement(currentClassesStr[x]+"label")
+		var label = document.createElement("class"+x);
 		label.innerHTML = currentClassesStr[x];
 		form.appendChild(label);
 		form.appendChild(classesInputElements[x]);
@@ -250,12 +240,18 @@ function removeClass()
 		alert("You need to actually select a class that you'd like to remove. I can't do all the work for you");
 	}else
 	{
+		var classToDelete = classes[atLeastOne].value;
 		console.log("This value is the arg passed to php file: "+classes[atLeastOne].value);
 		$.ajax({
 		type: "POST",
 		url: "PHP/removeClass.php",
 		data: {'classtodelete':classes[atLeastOne].value},
 		success: function(){
+			$("#notification").fadeIn("slow");
+			$("#notification > #text").html("Deleted "+classToDelete);
+			$(".dismiss").click(function(){
+				$("#notification").fadeOut("slow");
+			});
 			var indexToDelete = currentClassesStr.indexOf(classes[atLeastOne].value);
 			if (indexToDelete > -1) 
 			{
